@@ -18,6 +18,6 @@ public class ComputeSHA
     	}
 
 		// byte array to hex string
-    	System.out.println(DatatypeConverter.printHexBinary(md.digest()));
+    	System.out.println(DatatypeConverter.printHexBinary(md.digest()).toLowerCase());
 	}
 }
