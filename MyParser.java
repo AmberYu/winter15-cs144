@@ -47,10 +47,10 @@ class MyParser {
     static DocumentBuilder builder;
     
     static HashSet<String> userIDs = new HashSet<String>();
-    static PrintWriter itemsFile;
+    static PrintWriter itemFile;
     static PrintWriter itemcategoryFile;
-    static PrintWriter usersFile;
-    static PrintWriter bidsFile;
+    static PrintWriter userFile;
+    static PrintWriter bidFile;
     static int bidID = 0;
     static final String[] typeName = {
 	"none",
@@ -200,7 +200,7 @@ class MyParser {
         Element item[] = getElementsByTagNameNR(root,"item");
         //for each item, retrieve the data stored in XML DOM and store it into corresponding table
         try{
-            for(int i=0;i<item.size();i++)
+            for(int i=0;i<item.length;i++)
             {
                 parseItem(item[i]);
                 parseUser(item[i]);
@@ -208,11 +208,17 @@ class MyParser {
                 parseBid(item[i]);
             }
         }
+        catch(ParseException e)
+        {
+            e.printStackTrace();
+            System.exit(1);
+        }
         catch(IOException e)
         {
             e.printStackTrace();
             System.exit(1);
         }
+
         
         /**************************************************************/
         
@@ -221,11 +227,11 @@ class MyParser {
      
      * @param input the root element
      */
-    public static void parseItem(Element item) throw IOException{
+    public static void parseItem(Element item) throws ParseException{
         String itemID = item.getAttribute("ItemID");
         itemFile.append(itemID + columnSeparator);
         
-        Element seller = getElementByTagName(item,"Seller");
+        Element seller = getElementByTagNameNR(item,"Seller");
         String userID = seller.getAttribute("UserID");
         itemFile.append(userID + columnSeparator);
         
@@ -266,7 +272,7 @@ class MyParser {
      *
      * @param input the root element
      */
-    public static void parseUser(Element item) throw IOException{
+    public static void parseUser(Element item) throws IOException{
         Element seller = getElementByTagNameNR(item,"Seller");
         String userID = seller.getAttribute("UserID");
         boolean isDuplicate = userIDs.add(userID);
@@ -286,21 +292,21 @@ class MyParser {
         
         Element Bids = getElementByTagNameNR(item,"Bids");
         Element bid[] = getElementsByTagNameNR(item,"Bid");
-        for(int i =0;i<bid.size();i++)
+        for(int i =0;i<bid.length;i++)
         {
             Element bidder = getElementByTagNameNR(bid[i],"Bidder");
-            String userID = bidder.getAttribute("UserID");
-            boolean isDuplicate = userIDs.add(userID);
-            String rating = bidder.getAttribute("Rating");
-            String location = getElementTextByTagNameNR(bidder,"Location");
-            String country = getElementTextByTagNameNR(bidder,"Country");
-            if(location == null)
-                location = "";
-            if(country == null)
-                country = "";
-            if(isDuplicate)
+            String biduserID = bidder.getAttribute("UserID");
+            boolean bidisDuplicate = userIDs.add(biduserID);
+            String bidrating = bidder.getAttribute("Rating");
+            String bidlocation = getElementTextByTagNameNR(bidder,"Location");
+            String bidcountry = getElementTextByTagNameNR(bidder,"Country");
+            if(bidlocation == null)
+                bidlocation = "";
+            if(bidcountry == null)
+                bidcountry = "";
+            if(bidisDuplicate)
             {
-                userFile.append(userID + columnSeparator + rating + columnSeparator + location + columnSeparator + country);
+                userFile.append(biduserID + columnSeparator + bidrating + columnSeparator + bidlocation + columnSeparator + bidcountry);
                 userFile.append("\n");
             }
         }
@@ -310,10 +316,10 @@ class MyParser {
      *
      * @param input the root element
      */
-    public static void parseItemCategory(Element item) throw IOException{
+    public static void parseItemCategory(Element item) throws IOException{
         String itemID = item.getAttribute("ItemID");
         Element Category[] = getElementsByTagNameNR(item,"Category");
-        for(int i=0;i<Category.size();i++)
+        for(int i=0;i<Category.length;i++)
         {
             String cate = getElementText(Category[i]);
             itemcategoryFile.append(itemID + columnSeparator + cate);
@@ -324,11 +330,11 @@ class MyParser {
      *
      * @param input the root element
      */
-    public static void parseBid(Element item) throw IOException{
+    public static void parseBid(Element item) throws ParseException{
         Element Bids = getElementByTagNameNR(item,"Bids");
         Element bid[] = getElementsByTagNameNR(Bids,"Bid");
         String itemID = item.getAttribute("ItemID");
-        for(int i=0;i<bid.size();i++)
+        for(int i=0;i<bid.length;i++)
         {
             Element bidder = getElementByTagNameNR(bid[i],"Bidder");
             String UserID = bidder.getAttribute("UserID");
@@ -338,7 +344,7 @@ class MyParser {
             Date Time = input.parse(tempTime);
             String amount = strip(getElementTextByTagNameNR(bid[i],"Amount"));
             
-            bidFile.append(bidID++ + columnSeparator + UserID + columnSeparator + itemID +columnSeparator + output.format(time) + columnSeparator + amount);
+            bidFile.append(bidID++ + columnSeparator + UserID + columnSeparator + itemID +columnSeparator + output.format(Time) + columnSeparator + amount);
             bidFile.append("\n");
             
         }
@@ -370,9 +376,9 @@ class MyParser {
         try{
             //create four files corresponding to four tables
             itemFile = new PrintWriter(new FileWriter("item.csv",true));
-            itemcategoryFile = new Printwriter(new File("ItemCategroy.csv",true));
-            userFile = new PrintWriter(new File("Users.csv",true));
-            bidFile = new PrintWriter(new File("Bids.csv",true));
+            itemcategoryFile = new PrintWriter(new FileWriter("ItemCategroy.csv",true));
+            userFile = new PrintWriter(new FileWriter("Users.csv",true));
+            bidFile = new PrintWriter(new FileWriter("Bids.csv",true));
             
             
             /* Process all files listed on command line. */
