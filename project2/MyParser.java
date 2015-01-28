@@ -376,7 +376,7 @@ class MyParser {
         try{
             //create four files corresponding to four tables
             itemFile = new PrintWriter(new FileWriter("item.csv",true));
-            itemcategoryFile = new PrintWriter(new FileWriter("ItemCategroy.csv",true));
+            itemcategoryFile = new PrintWriter(new FileWriter("ItemCategory.csv",true));
             userFile = new PrintWriter(new FileWriter("Users.csv",true));
             bidFile = new PrintWriter(new FileWriter("Bids.csv",true));
             
