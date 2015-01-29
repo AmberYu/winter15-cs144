@@ -3,22 +3,23 @@ SELECT COUNT(*) FROM Users;
 
 SELECT COUNT(*) 
 FROM   Users U, Item I 
-WHERE  U.UserID = I.Seller AND U.Location = 'New York';
+WHERE  U.UserID = I.Seller AND U.Location = BINARY 'New York';
 
 SELECT COUNT(*)
 FROM(
-SELECT ItemID 
-FROM ItemCategroy 
+SELECT ItemID,COUNT(*) 
+FROM ItemCategory 
 GROUP BY ItemID 
 HAVING COUNT(*) = 4) IC;
 
 
-SELECT    ItemID
-FROM      Item
-WHERE     Bid_Num>0 AND Ends > '2001-12-20 00:00:01' AND Currently = (SELECT MAX(I1.Currently)
-					   FROM   Item I1
-					   WHERE  I1.Bid_Num>0 AND I1.Ends > '2001-12-20 00:00:01');
-
+SELECT Bids.ItemID
+FROM Bids
+INNER JOIN Item
+ON Bids.ItemID = Item.ItemID
+WHERE Ends > '2001-12-20 00:00:01'
+AND Amount =
+        (SELECT MAX(Amount) FROM Bids);
 
 SELECT COUNT(*)
 FROM   Users

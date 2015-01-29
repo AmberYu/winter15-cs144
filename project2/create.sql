@@ -29,7 +29,9 @@ CREATE TABLE Item
 CREATE TABLE ItemCategory
 (
  ItemID   INT(10) NOT NULL,
- Category VARCHAR(100) NOT NULL
+ Category VARCHAR(100) NOT NULL,
+ 
+ FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
 );
 
 
