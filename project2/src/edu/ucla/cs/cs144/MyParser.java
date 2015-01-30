@@ -250,7 +250,11 @@ class MyParser {
         String bid_Num = getElementTextByTagNameNR(item,"Number_of_Bids");
         itemFile.append(bid_Num + columnSeparator);
         
-        String buy_Price = strip(getElementTextByTagNameNR(item,"Buy_Price"));
+        String buy_Price;
+        if (getElementTextByTagNameNR(item,"Buy_Price") != "")
+            buy_Price = strip(getElementTextByTagNameNR(item, "Buy_Price"));
+        else
+            buy_Price = "\\N";
         //System.out.println("buy_Price: " + buy_Price);
         itemFile.append(buy_Price + columnSeparator);
         
@@ -283,19 +287,21 @@ class MyParser {
         String rating = seller.getAttribute("Rating");
         String location = getElementText(getElementByTagNameNR(item,"Location"));
         String country = getElementText(getElementByTagNameNR(item,"Country"));
-        if(location==null)
-            location = "";
+        Element location_ele = getElementByTagNameNR(item, "Location");
+        String latitude = location_ele.getAttribute("Latitude");
+        String longitude = location_ele.getAttribute("Longitude");
+        
+        if(location == "")
+            location = "\\N";
         else {
-            String latitude = location.getAttribute("Latitude");
-            String longitude = location.getAttribute("Longitude");
-            if(latitude==null)
-                latitude = "";
-            if(longitude==null)
-                longitude = "";
+            if(latitude == "")
+                latitude = "\\N";
+            if(longitude == "")
+                longitude = "\\N";
         }
         
-        if(country==null)
-            country = "";
+        if(country=="")
+            country = "\\N";
         //Check whether the user has been stored in the table or not
         if(isDuplicate)
         {
@@ -313,15 +319,15 @@ class MyParser {
             String bidrating = bidder.getAttribute("Rating");
             String bidlocation = getElementTextByTagNameNR(bidder,"Location");
             String bidcountry = getElementTextByTagNameNR(bidder,"Country");
-            if(bidlocation == null)
-                bidlocation = "";
-            if(bidcountry == null)
-                bidcountry = "";
-            String latitude = "";
-            String longitude = "";
+            if(bidlocation == "")
+                bidlocation = "\\N";
+            if(bidcountry == "")
+                bidcountry = "\\N";
+            String bidlatitude = "\\N";
+            String bidlongitude = "\\N";
             if(bidisDuplicate)
             {
-                userFile.append(biduserID + columnSeparator + bidrating + columnSeparator + bidlocation + columnSeparator + bidcountry + columnSeparator +latitude + columnSeparator + longitude);
+                userFile.append(biduserID + columnSeparator + bidrating + columnSeparator + bidlocation + columnSeparator + bidcountry + columnSeparator + bidlatitude + columnSeparator + bidlongitude);
                 userFile.append("\n");
             }
         }
