@@ -4,6 +4,8 @@ CREATE TABLE Users
 	Rating INT NOT NULL,
 	Location VARCHAR (100),
 	Country VARCHAR (50),
+	Latitude VARCHAR(11),
+	Longitute VARCHAR(11),
 	
 	PRIMARY KEY(UserID)		
 );
@@ -20,7 +22,6 @@ CREATE TABLE Item
 	Started TIMESTAMP NOT NULL,
 	Ends TIMESTAMP NOT NULL,
 	Description VARCHAR(4000),
-	BidID INT(10) NOT NULL,
 
 	PRIMARY KEY(ItemID),
 	FOREIGN KEY (Seller) REFERENCES Users(UserID)

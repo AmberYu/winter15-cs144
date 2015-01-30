@@ -285,12 +285,21 @@ class MyParser {
         String country = getElementText(getElementByTagNameNR(item,"Country"));
         if(location==null)
             location = "";
+        else {
+            String latitude = location.getAttribute("Latitude");
+            String longitude = location.getAttribute("Longitude");
+            if(latitude==null)
+                latitude = "";
+            if(longitude==null)
+                longitude = "";
+        }
+        
         if(country==null)
             country = "";
         //Check whether the user has been stored in the table or not
         if(isDuplicate)
         {
-            userFile.append(userID + columnSeparator + rating + columnSeparator + location + columnSeparator + country);
+            userFile.append(userID + columnSeparator + rating + columnSeparator + location + columnSeparator + country + columnSeparator + latitude + columnSeparator + longitude);
             userFile.append("\n");
         }
         
@@ -308,9 +317,11 @@ class MyParser {
                 bidlocation = "";
             if(bidcountry == null)
                 bidcountry = "";
+            String latitude = "";
+            String longitude = "";
             if(bidisDuplicate)
             {
-                userFile.append(biduserID + columnSeparator + bidrating + columnSeparator + bidlocation + columnSeparator + bidcountry);
+                userFile.append(biduserID + columnSeparator + bidrating + columnSeparator + bidlocation + columnSeparator + bidcountry + columnSeparator +latitude + columnSeparator + longitude);
                 userFile.append("\n");
             }
         }
