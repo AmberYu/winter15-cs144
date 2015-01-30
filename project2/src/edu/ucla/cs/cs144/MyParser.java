@@ -239,22 +239,19 @@ class MyParser {
         String name = getElementTextByTagNameNR(item, "Name");
         itemFile.append(name + columnSeparator);
         
-        String currently = getElementTextByTagNameNR(item,"Currently");
-         System.out.println("currently: " + currently);
-        //strip(getElementTextByTagNameNR(item,"Currently"));
+        String currently = strip(getElementTextByTagNameNR(item,"Currently"));
+        //System.out.println("currently: " + currently);
         itemFile.append(currently + columnSeparator);
         
-        String first_Bid = getElementTextByTagNameNR(item,"First_Bid");
-        System.out.println("first_Bid: " + first_Bid);
-        //strip(getElementTextByTagNameNR(item,"First_Bid"));
+        String first_Bid = strip(getElementTextByTagNameNR(item,"First_Bid"));
+        //System.out.println("first_Bid: " + first_Bid);
         itemFile.append(first_Bid + columnSeparator);
         
         String bid_Num = getElementTextByTagNameNR(item,"Number_of_Bids");
         itemFile.append(bid_Num + columnSeparator);
         
-        String buy_Price = getElementTextByTagNameNR(item,"Buy_Price");
-        //strip(getElementTextByTagNameNR(item,"Buy_Price"));
-        System.out.println("buy_Price: " + buy_Price);
+        String buy_Price = strip(getElementTextByTagNameNR(item,"Buy_Price"));
+        //System.out.println("buy_Price: " + buy_Price);
         itemFile.append(buy_Price + columnSeparator);
         
         SimpleDateFormat input = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
@@ -272,7 +269,7 @@ class MyParser {
             description = description.substring(0, 4000);
         itemFile.append(description);
         
-            itemFile.append("\n");
+        itemFile.append("\n");
     }
     
     /* Parse from the XML DOM tree, and get nodes information about userID(key), rating, location, and country.
@@ -382,10 +379,10 @@ class MyParser {
         }
         try{
             //create four files corresponding to four tables
-            itemFile = new PrintWriter(new FileWriter("item.csv",true));
-            itemcategoryFile = new PrintWriter(new FileWriter("ItemCategory.csv",true));
-            userFile = new PrintWriter(new FileWriter("Users.csv",true));
-            bidFile = new PrintWriter(new FileWriter("Bids.csv",true));
+            itemFile = new PrintWriter(new FileWriter("Item.del",true));
+            itemcategoryFile = new PrintWriter(new FileWriter("ItemCategory.del",true));
+            userFile = new PrintWriter(new FileWriter("Users.del",true));
+            bidFile = new PrintWriter(new FileWriter("Bids.del",true));
             
             
             /* Process all files listed on command line. */
