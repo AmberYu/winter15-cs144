@@ -46,11 +46,41 @@ class MyParser {
     static final String columnSeparator = "|*|";
     static DocumentBuilder builder;
     
-    static HashSet<String> userIDs = new HashSet<String>();
+    static class User {
+        String userID;
+        String SellerRating;
+        String BidRating;
+        String Location;
+        String Country;
+        
+        User(String userid, String sellerrating, String bidrating, String location, String country)
+        {
+            userID = userid;
+            SellerRating = sellerrating;
+            BidRating = bidrating;
+            Location = location;
+            Country = country;
+        }
+        
+        void updateBidderInfo(String bidrating, String location, String country)
+        {
+            BidRating = bidrating;
+            Location = location;
+            Country = country;
+        }
+        
+        void updateSellerInfo(String sellerrating)
+        {
+            SellerRating = sellerrating;
+        }
+    }
+
+    //static HashSet<String> userIDs = new HashSet<String>();
     static PrintWriter itemFile;
     static PrintWriter itemcategoryFile;
     static PrintWriter userFile;
     static PrintWriter bidFile;
+    static HashMap<String, User> userFileContent = new HashMap<String, User>();
     static int bidID = 0;
     static final String[] typeName = {
 	"none",
@@ -207,6 +237,11 @@ class MyParser {
                 parseItemCategory(item[i]);
                 parseBid(item[i]);
             }
+
+            for (User u : userFileContent.values())
+            {
+                userFile.append(u.userID + columnSeparator + u.SellerRating + columnSeparator + u.BidRating + columnSeparator + u.Location + columnSeparator + u.Country + "\n");
+            }
         }
         catch(ParseException e)
         {
@@ -240,11 +275,9 @@ class MyParser {
         itemFile.append(name + columnSeparator);
         
         String currently = strip(getElementTextByTagNameNR(item,"Currently"));
-        //System.out.println("currently: " + currently);
         itemFile.append(currently + columnSeparator);
         
         String first_Bid = strip(getElementTextByTagNameNR(item,"First_Bid"));
-        //System.out.println("first_Bid: " + first_Bid);
         itemFile.append(first_Bid + columnSeparator);
         
         String bid_Num = getElementTextByTagNameNR(item,"Number_of_Bids");
@@ -255,8 +288,18 @@ class MyParser {
             buy_Price = strip(getElementTextByTagNameNR(item, "Buy_Price"));
         else
             buy_Price = "\\N";
-        //System.out.println("buy_Price: " + buy_Price);
         itemFile.append(buy_Price + columnSeparator);
+
+        String location = getElementText(getElementByTagNameNR(item,"Location"));
+        String country = getElementText(getElementByTagNameNR(item,"Country"));
+        Element location_ele = getElementByTagNameNR(item, "Location");
+        String latitude = location_ele.getAttribute("Latitude");
+        String longitude = location_ele.getAttribute("Longitude");
+        if(latitude == "")
+            latitude = "\\N";
+        if(longitude == "")
+            longitude = "\\N";
+        itemFile.append(location + columnSeparator + country + columnSeparator + latitude + columnSeparator + longitude + columnSeparator);
         
         SimpleDateFormat input = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
         SimpleDateFormat output =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -283,30 +326,18 @@ class MyParser {
     public static void parseUser(Element item) throws IOException{
         Element seller = getElementByTagNameNR(item,"Seller");
         String userID = seller.getAttribute("UserID");
-        boolean isDuplicate = userIDs.add(userID);
-        String rating = seller.getAttribute("Rating");
-        String location = getElementText(getElementByTagNameNR(item,"Location"));
-        String country = getElementText(getElementByTagNameNR(item,"Country"));
-        Element location_ele = getElementByTagNameNR(item, "Location");
-        String latitude = location_ele.getAttribute("Latitude");
-        String longitude = location_ele.getAttribute("Longitude");
-        
-        if(location == "")
-            location = "\\N";
-        else {
-            if(latitude == "")
-                latitude = "\\N";
-            if(longitude == "")
-                longitude = "\\N";
-        }
-        
-        if(country=="")
-            country = "\\N";
+        String sellerrating = seller.getAttribute("Rating");
+
         //Check whether the user has been stored in the table or not
-        if(isDuplicate)
+        if(!userFileContent.containsKey(userID))
         {
-            userFile.append(userID + columnSeparator + rating + columnSeparator + location + columnSeparator + country + columnSeparator + latitude + columnSeparator + longitude);
-            userFile.append("\n");
+            User newSeller = new User(userID, sellerrating, "\\N", "\\N", "\\N");
+            userFileContent.put(userID, newSeller);
+        } else
+        {
+            User existingBidder = userFileContent.get(userID);
+            existingBidder.updateSellerInfo(sellerrating);
+            userFileContent.put(userID, existingBidder);
         }
         
         Element Bids = getElementByTagNameNR(item,"Bids");
@@ -315,20 +346,21 @@ class MyParser {
         {
             Element bidder = getElementByTagNameNR(bid[i],"Bidder");
             String biduserID = bidder.getAttribute("UserID");
-            boolean bidisDuplicate = userIDs.add(biduserID);
             String bidrating = bidder.getAttribute("Rating");
             String bidlocation = getElementTextByTagNameNR(bidder,"Location");
             String bidcountry = getElementTextByTagNameNR(bidder,"Country");
-            if(bidlocation == "")
-                bidlocation = "\\N";
-            if(bidcountry == "")
-                bidcountry = "\\N";
-            String bidlatitude = "\\N";
-            String bidlongitude = "\\N";
-            if(bidisDuplicate)
+            if(bidlocation == "") bidlocation = "\\N";
+            if(bidcountry == "") bidcountry = "\\N";
+
+            if(!userFileContent.containsKey(biduserID))
             {
-                userFile.append(biduserID + columnSeparator + bidrating + columnSeparator + bidlocation + columnSeparator + bidcountry + columnSeparator + bidlatitude + columnSeparator + bidlongitude);
-                userFile.append("\n");
+                User newBidder = new User(biduserID, "\\N", bidrating, bidlocation, bidcountry);
+                userFileContent.put(biduserID, newBidder);
+            } else
+            {
+                User existingSeller = userFileContent.get(biduserID);
+                existingSeller.updateBidderInfo(bidrating, bidlocation, bidcountry);
+                userFileContent.put(biduserID, existingSeller);
             }
         }
         

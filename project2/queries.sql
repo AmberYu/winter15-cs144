@@ -2,8 +2,8 @@
 SELECT COUNT(*) FROM Users;
 
 SELECT COUNT(*) 
-FROM   Users U, Item I 
-WHERE  U.UserID = I.Seller AND U.Location = BINARY 'New York';
+FROM   Item
+WHERE  Item.Location = BINARY 'New York';
 
 SELECT COUNT(*)
 FROM(
@@ -25,7 +25,7 @@ SELECT COUNT(*)
 FROM   Users
 WHERE  UserID IN (SELECT U.UserID
 				  FROM   Users U, Item I
-				  WHERE  U.UserID=I.Seller AND U.Rating > 1000);
+				  WHERE  U.UserID=I.Seller AND U.SellerRating > 1000);
 
 
 SELECT COUNT(*)

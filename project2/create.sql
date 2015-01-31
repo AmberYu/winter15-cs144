@@ -1,11 +1,10 @@
 CREATE TABLE Users
 (
 	UserID VARCHAR(50) NOT NULL,
-	Rating INT NOT NULL,
+	SellerRating INT NOT NULL,
+	BidRating INT NOT NULL,
 	Location VARCHAR (100),
 	Country VARCHAR (50),
-	Latitude VARCHAR(11),
-	Longitute VARCHAR(11),
 	
 	PRIMARY KEY(UserID)		
 );
@@ -19,6 +18,10 @@ CREATE TABLE Item
 	First_Bid DECIMAL(8,2) NOT NULL,
 	Bid_Num INT NOT NULL, 
 	Buy_Price DECIMAL(8,2),
+	Location VARCHAR (100) NOT NULL,
+	Country VARCHAR (50) NOT NULL,
+	Latitude VARCHAR(11),
+	Longitude VARCHAR(11),
 	Started TIMESTAMP NOT NULL,
 	Ends TIMESTAMP NOT NULL,
 	Description VARCHAR(4000),
