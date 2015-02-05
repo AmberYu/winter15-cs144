@@ -28,6 +28,8 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.apache.lucene.search.Hit;
+import org.apache.lucene.search.Hits;
 
 import edu.ucla.cs.cs144.DbManager;
 import edu.ucla.cs.cs144.SearchRegion;
@@ -52,8 +54,49 @@ public class AuctionSearch implements IAuctionSearch {
 	
 	public SearchResult[] basicSearch(String query, int numResultsToSkip, 
 			int numResultsToReturn) {
+        try{
+            System.out.println("basicSearch begin----");
+            IndexSearcher searcher = new IndexSearcher(System.getenv("LUCENE_INDEX") + "/directory");
+            //DirectoryReader.open(FSDirectory.open(new File("/var/lib/lucene/directory")))
+            //create a QueryParser
+            QueryParser parser = new QueryParser("content", new StandardAnalyzer());
+            //get a query
+            Query que = parser.parse(query);
+            //get all search result
+            Hits hits = searcher.search(que);
+            
+            //System.out.println("the number of search result:"+hits.length());
+            
+            
+            //if the number to skip is larger than the number of search results, then we return an empty set of result
+            int len=0;
+            if(numResultsToSkip>=hits.length())
+                return new SearchResult[0];
+            //otherwise, we get the number of results required to be returned
+            else if(numResultsToReturn==0)
+                len = hits.length()-numResultsToSkip;
+            else len = Math.min(hits.length(),numResultsToSkip+numResultsToReturn)-numResultsToSkip;
+            SearchResult[] result = new SearchResult[len];
+            
+            for(int i=0;i<result.length;i++){
+                Document doc = hits.doc(i+numResultsToSkip);
+                String itemID = doc.get("itemID");
+                String name = doc.get("name");
+                SearchResult s = new SearchResult();
+                s.setItemId(itemID);
+                s.setName(name);
+                result[i] = s;
+            }
+            return result;
+        }
+        
 		// TODO: Your code here!
-		return new SearchResult[0];
+        catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+            return new SearchResult[0];
+        }
+
 	}
 
 	public SearchResult[] spatialSearch(String query, SearchRegion region,
