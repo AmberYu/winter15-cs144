@@ -28,8 +28,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.apache.lucene.search.Hit;
-import org.apache.lucene.search.Hits;
+
 
 import edu.ucla.cs.cs144.DbManager;
 import edu.ucla.cs.cs144.SearchRegion;
@@ -56,30 +55,31 @@ public class AuctionSearch implements IAuctionSearch {
 			int numResultsToReturn) {
         try{
             System.out.println("basicSearch begin----");
-            IndexSearcher searcher = new IndexSearcher(System.getenv("LUCENE_INDEX") + "/directory");
-            //DirectoryReader.open(FSDirectory.open(new File("/var/lib/lucene/directory")))
-            //create a QueryParser
-            QueryParser parser = new QueryParser("content", new StandardAnalyzer());
-            //get a query
-            Query que = parser.parse(query);
-            //get all search result
-            Hits hits = searcher.search(que);
+            // instantiate the search engine
+            SearchEngine se = new SearchEngine();
             
-            //System.out.println("the number of search result:"+hits.length());
+            // retrieve top 2000 matching document list for the query "Notre Dame museum"
+            TopDocs topDocs = se.performSearch(query, 2000);
+            
+            // obtain the ScoreDoc (= documentID, relevanceScore) array from topDocs
+            ScoreDoc[] hits = topDocs.scoreDocs;
+            
+            System.out.println("the number of search result:"+hits.length);
             
             
             //if the number to skip is larger than the number of search results, then we return an empty set of result
             int len=0;
-            if(numResultsToSkip>=hits.length())
+            if(numResultsToSkip>=hits.length)
                 return new SearchResult[0];
             //otherwise, we get the number of results required to be returned
             else if(numResultsToReturn==0)
-                len = hits.length()-numResultsToSkip;
-            else len = Math.min(hits.length(),numResultsToSkip+numResultsToReturn)-numResultsToSkip;
+                len = hits.length-numResultsToSkip;
+            else len = Math.min(hits.length,numResultsToSkip+numResultsToReturn)-numResultsToSkip;
             SearchResult[] result = new SearchResult[len];
             
             for(int i=0;i<result.length;i++){
-                Document doc = hits.doc(i+numResultsToSkip);
+                Document doc = se.getDocument(hits[i+numResultsToSkip].doc);
+                //Document doc = hits.doc(i+numResultsToSkip);
                 String itemID = doc.get("itemID");
                 String name = doc.get("name");
                 SearchResult s = new SearchResult();

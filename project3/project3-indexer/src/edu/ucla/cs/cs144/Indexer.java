@@ -1,16 +1,26 @@
 package edu.ucla.cs.cs144;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.File;
+
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 public class Indexer {
     
@@ -22,8 +32,10 @@ public class Indexer {
     
     public IndexWriter getIndexWriter(boolean create) throws IOException{
     	if(indexWriter == null){
-    		String directory = System.getenv("LUCENE_INDEX")+"/directory";
-    		indexWriter = new IndexWriter(directory,new StandardAnalyzer(),create);
+            Directory indexDir = FSDirectory.open(new File("/var/lib/lucene/directory"));
+            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_10_2, new StandardAnalyzer());
+            //config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+            indexWriter = new IndexWriter(indexDir, config);
     	}
     	return indexWriter;
     }
@@ -52,8 +64,13 @@ public class Indexer {
         
 		String query2="SELECT * FROM ItemCategory";
 		ResultSet CateRS=stmt2.executeQuery(query2);
+        getIndexWriter(true);
 	    //Create Lucene Index
-		IndexWriter writer=getIndexWriter(true);
+        /*Directory indexDir = FSDirectory.open(new File("/var/lib/lucene/directory"));
+        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_10_2, new StandardAnalyzer());
+        config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+        indexWriter = new IndexWriter(indexDir, config);*/
+        IndexWriter writer=getIndexWriter(false);
         //Get objects from ResultSet and add them to Index
         while(ItemRS.next()){
             
@@ -74,12 +91,12 @@ public class Indexer {
             }
             
             Document doc = new Document();
-            doc.add(new Field("itemID",itemID1,Field.Store.YES,Field.Index.NO));
-            doc.add(new Field("name",name,Field.Store.YES,Field.Index.TOKENIZED));
-            doc.add(new Field("description",description,Field.Store.YES,Field.Index.TOKENIZED));
-            doc.add(new Field("category",category,Field.Store.YES,Field.Index.TOKENIZED));
+            doc.add(new StringField("itemID",itemID1,Field.Store.YES));
+            doc.add(new StringField("name",name,Field.Store.YES));
+            doc.add(new StringField("description",description,Field.Store.YES));
+            doc.add(new StringField("category",category,Field.Store.YES));
             String content=name+" "+category+" "+description;
-            doc.add(new Field("content",content,Field.Store.NO,Field.Index.TOKENIZED));
+            doc.add(new TextField("content",content,Field.Store.NO));
             writer.addDocument(doc);
         }
 		
