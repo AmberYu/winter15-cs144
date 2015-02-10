@@ -170,7 +170,7 @@ public class AuctionSearch implements IAuctionSearch {
             queryItemData.setString(1, itemId);
             ResultSet itemData = queryItemData.executeQuery();
 
-            if (itemData.getRow() == 0)
+            if (!itemData.next())
                 return "";
 
             // start concatenating result xml string
@@ -183,17 +183,17 @@ public class AuctionSearch implements IAuctionSearch {
             try {
                 buyPrice = getCurrencyString(itemData.getFloat("Buy_Price"));
             } catch (SQLException exception) { }
-            if (buyPrice != "") resultXML += "<Buy_Price>" + buyPrice + "</Buy_Price>\n";
+            if (!buyPrice.equals("$0.00")) resultXML += "<Buy_Price>" + buyPrice + "</Buy_Price>\n";
 
             resultXML += "<First_Bid>" + getCurrencyString(itemData.getFloat("First_Bid")) + "</First_Bid>\n";
             resultXML += "<Number_of_Bids>" + itemData.getString("Bid_Num") + "</Number_of_Bids>\n";
             resultXML += getBidString(connection, itemId);
             resultXML += getLocationString(itemData);
-            resultXML += "<Country>" + itemData.getString("Country") + "</Country>\n";
+            resultXML += "<Country>" + getParsedString(itemData.getString("Country")) + "</Country>\n";
             resultXML += "<Started>" + getTimeString(itemData.getTimestamp("Started").toString()) + "</Started>\n";
             resultXML += "<Ends>" + getTimeString(itemData.getTimestamp("Ends").toString()) + "</Ends>\n";
             resultXML += getSellerString(connection, itemData.getString("Seller"));
-            resultXML += "<Description>" + itemData.getString("Description") + "</Description>\n";
+            resultXML += "<Description>" + getParsedString(itemData.getString("Description")) + "</Description>\n";
             resultXML += "</Item>";
 
             connection.close();
@@ -208,6 +208,18 @@ public class AuctionSearch implements IAuctionSearch {
 		return message;
 	}
 
+    // do character escaping
+    private String getParsedString(String inputString)
+    {
+        inputString = inputString.replaceAll("<", "&lt;");
+        inputString = inputString.replaceAll(">", "&gt;");
+        inputString = inputString.replaceAll("&", "&amp;");
+        inputString = inputString.replaceAll("\"", "&quot;");   // do we need to escape quots?
+        inputString = inputString.replaceAll("\'", "&apos;");
+
+        return inputString;
+    }
+
     // help function: return the string for item categories
     private String getCategoryString(Connection connection, String itemId) throws SQLException
     {
@@ -216,9 +228,9 @@ public class AuctionSearch implements IAuctionSearch {
         queryCategoryData.setString(1, itemId);
         ResultSet categoryData = queryCategoryData.executeQuery();
 
-        while (categoryData.getRow() != 0)
+        while (categoryData.next())
         {
-            categoryString += "<Category>" + categoryData.getString("Category") + "</Category>\n";
+            categoryString += "<Category>" + getParsedString(categoryData.getString("Category")) + "</Category>\n";
         }
         return categoryString;
     }
@@ -237,11 +249,11 @@ public class AuctionSearch implements IAuctionSearch {
         queryBid.setString(1, itemId);
         ResultSet bidData = queryBid.executeQuery();
 
-        if (bidData.getRow() == 0)
+        if (!bidData.next())
             return "<Bids />\n";
 
         String bidString = "<Bids>\n";
-        while (bidData.next())
+        do
         {
             bidString += "<Bid>\n";
 
@@ -250,7 +262,7 @@ public class AuctionSearch implements IAuctionSearch {
             PreparedStatement queryBidder = connection.prepareStatement("SELECT * FROM Users WHERE UserID = ?");
             queryBidder.setString(1, bidderId);
             ResultSet bidderData = queryBidder.executeQuery();
-            if (bidderData.getRow() != 0)
+            if (bidderData.next())
             {
                 bidString += "<Bidder Rating=\"" + bidderData.getString("BidRating") + "\" UserID=\"" + bidderId + "\">\n";
 
@@ -269,8 +281,8 @@ public class AuctionSearch implements IAuctionSearch {
                 } catch (SQLException e) {
                     hasCountry = false;
                 }
-                if (hasLocation) bidString += "<Location>" + location + "/<Location>\n";
-                if (hasCountry) bidString += "<Country>" + country + "/<Country>\n";
+                if (hasLocation) bidString += "<Location>" + getParsedString(location) + "/<Location>\n";
+                if (hasCountry) bidString += "<Country>" + getParsedString(country) + "/<Country>\n";
 
                 bidString += "</Bidder>\n";
             }
@@ -278,7 +290,7 @@ public class AuctionSearch implements IAuctionSearch {
             bidString += "<Time>" + getTimeString(bidData.getTimestamp("Time").toString()) + "</Time>\n";
             bidString += "<Amount>" + getCurrencyString(bidData.getFloat("Amount")) + "</Amount>\n";
             bidString += "</Bid>\n";
-        }
+        } while (bidData.next());
 
         bidString += "</Bids>\n";
         return bidString;
@@ -302,7 +314,7 @@ public class AuctionSearch implements IAuctionSearch {
         else
             locationString = "<Location>";
 
-        return locationString + itemData.getString("Location") + "</Location>\n";
+        return locationString + getParsedString(itemData.getString("Location")) + "</Location>\n";
     }
 
     // help function: return the string with specific timestamp format
@@ -329,8 +341,8 @@ public class AuctionSearch implements IAuctionSearch {
         querySeller.setString(1, sellerId);
         ResultSet sellerData = querySeller.executeQuery();
 
-        if (sellerData.getRow() != 0)
-            return "<Seller Rating=\"" + sellerData.getString("SellerRating") + "\" UserId=\"" + sellerId + "\" />\n";
+        if (sellerData.next())
+            return "<Seller Rating=\"" + sellerData.getString("SellerRating") + "\" UserID=\"" + sellerId + "\" />\n";
         else
             return "";
     }

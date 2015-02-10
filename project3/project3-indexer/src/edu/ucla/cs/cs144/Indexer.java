@@ -114,7 +114,7 @@ public class Indexer {
             doc.add(new TextField("Description",description,Field.Store.YES));
             doc.add(new StringField("Category",category,Field.Store.YES));
             String content=name+" "+category+" "+description;
-            //doc.add(new TextField("content",content,Field.Store.NO));
+            doc.add(new TextField("content",content,Field.Store.NO));
             writer.addDocument(doc);
         }
 		

@@ -16,7 +16,7 @@ public class AuctionSearchTest {
 		String reply = as.echo(message);
 		System.out.println("Reply: " + reply);
 		
-		String query = "superman";
+		String query = "star trek";
 		SearchResult[] basicResults = as.basicSearch(query, 0, 20);
 		System.out.println("Basic Seacrh Query: " + query);
 		System.out.println("Received " + basicResults.length + " results");
@@ -33,7 +33,7 @@ public class AuctionSearchTest {
 			System.out.println(result.getItemId() + ": " + result.getName());
 		}
 		
-		String itemId = "1497595357";
+		String itemId = "1497614363";
 		String item = as.getXMLDataForItemId(itemId);
 		System.out.println("XML data for ItemId: " + itemId);
 		System.out.println(item);

@@ -7,7 +7,7 @@ CREATE TABLE Location
 
 
 -- populate the table, x = lat, y = lon
-INSERT INTO Location (ItemID, Location)
+INSERT INTO Location (ItemID, Coordinates)
 	SELECT ItemID, POINT(Latitude, Longitude)
 	FROM Item
 	WHERE Latitude != "" AND Longitude != "";
