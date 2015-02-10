@@ -182,7 +182,7 @@ public class AuctionSearch implements IAuctionSearch {
             String buyPrice = "";
             try {
                 buyPrice = getCurrencyString(itemData.getFloat("Buy_Price"));
-            } catch (SQLException exception) { }
+            } catch (SQLException sqlException) { }
             if (!buyPrice.equals("$0.00")) resultXML += "<Buy_Price>" + buyPrice + "</Buy_Price>\n";
 
             resultXML += "<First_Bid>" + getCurrencyString(itemData.getFloat("First_Bid")) + "</First_Bid>\n";
@@ -193,7 +193,16 @@ public class AuctionSearch implements IAuctionSearch {
             resultXML += "<Started>" + getTimeString(itemData.getTimestamp("Started").toString()) + "</Started>\n";
             resultXML += "<Ends>" + getTimeString(itemData.getTimestamp("Ends").toString()) + "</Ends>\n";
             resultXML += getSellerString(connection, itemData.getString("Seller"));
-            resultXML += "<Description>" + getParsedString(itemData.getString("Description")) + "</Description>\n";
+            
+            String description = "";
+            try {
+                description = getParsedString(itemData.getString("Description"));
+            } catch (SQLException sqlException) { }
+            if (!description.equals(""))
+                resultXML += "<Description>" + description + "</Description>\n";
+            else
+                resultXML += "<Description />\n";
+
             resultXML += "</Item>";
 
             connection.close();
@@ -309,7 +318,7 @@ public class AuctionSearch implements IAuctionSearch {
             hasLatLon = false;
         }
 
-        if (hasLatLon)
+        if (hasLatLon && latitude != null && longitude != null)
             locationString = "<Location Latitude=\"" + latitude + "\" Longitude=\"" + longitude + "\">";
         else
             locationString = "<Location>";
