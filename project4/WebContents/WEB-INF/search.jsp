@@ -1,7 +1,11 @@
 <html>
-	<head><title>Key Word Search</title></head>
+	<% String[] itemIDs = (String[])request.getAttribute("itemIDs"); %>
+	<% String[] itemNames = (String[])request.getAttribute("itemNames"); %>
+	<head>
+		<title><%=request.getAttribute("title") %></title>
+	</head>
 	<body>
-		<form name="search" action="/search" method="GET">
+		<form name="search1" action="/search" method="GET">
 			<table border="0" align="center" style="padding-top:50px">
                 <tr><td align="center"><img alt="Ebay" src="ebay.png"/></td></tr>
 				<tr>
@@ -17,5 +21,11 @@
 				</tr>
 			</table>	
 		</form>	
-	</body> 	
+			<div>The total number of results is: <%=itemIDs.length %></div>
+			<ul id="list">
+			<% for (int i=0; i<itemIDs.length; i++) {%>
+				<li><%=itemIDs[i] %>&nbsp;&nbsp;&nbsp;<%=itemNames[i] %></li>	
+			<%} %>
+			</ul>
+	</body>	
 </html>

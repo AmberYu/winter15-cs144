@@ -16,7 +16,8 @@ public class SearchServlet extends HttpServlet implements Servlet {
     {
         // your codes here
         //get the parameters contained in this request
-        String content = request.getParameter("content");
+        String content = "";
+        content = request.getParameter("content");
         int numResultsToSkip = Integer.parseInt(request.getParameter("numResultsToSkip"));
         int numResultsToReturn = Integer.parseInt(request.getParameter("numResultsToReturn"));
         
