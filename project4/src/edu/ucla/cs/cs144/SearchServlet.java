@@ -17,8 +17,8 @@ public class SearchServlet extends HttpServlet implements Servlet {
         // your codes here
         //get the parameters contained in this request
         String content = request.getParameter("content");
-        int numResultsToSkip = Integer.parseInt(request.getParameter("numberOfSkip"));
-        int numResultsToReturn = Integer.parseInt(request.getParameter("numberOfReturn"));
+        int numResultsToSkip = Integer.parseInt(request.getParameter("numResultsToSkip"));
+        int numResultsToReturn = Integer.parseInt(request.getParameter("numResultsToReturn"));
         
         SearchResult[] results = AuctionSearchClient.basicSearch(content, 0, 0);
         request.setAttribute("lengthOfAllResults",results.length);
@@ -42,8 +42,8 @@ public class SearchServlet extends HttpServlet implements Servlet {
             }
         }
         request.setAttribute("title", "Basic Search Result");
-        request.setAttribute("numOfSkip", numResultsToSkip);
-        request.setAttribute("numOfReturn", numResultsToReturn);
+        request.setAttribute("numResultsToSkip", numResultsToSkip);
+        request.setAttribute("numResultsToReturn", numResultsToReturn);
         request.setAttribute("content", content);
         request.setAttribute("itemIDs", itemIDs);
         request.setAttribute("itemNames", itemNames);
