@@ -5,7 +5,7 @@
 		<title><%=request.getAttribute("title") %></title>
 	</head>
 	<body>
-		<form name="search1" action="/search" method="GET">
+		<form name="search1" action="/eBay/search" method="GET">
 			<table border="0" align="center" style="padding-top:50px">
                 <tr><td align="center"><img alt="Ebay" src="ebay.png"/></td></tr>
 				<tr>
