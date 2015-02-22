@@ -42,7 +42,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
     private String Country;
     private String Started;
     private String Ends;
-    private String Seller_UID;
+    private String Seller_ID;
     private String Seller_Rating;
     private String Description;
     //private String BidUID;
@@ -80,7 +80,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
         
         if(item!=null && item.getNodeName().equals("Item")){
             Element seller = getElementByTagNameNR(item,"Seller");
-            Seller_UID = seller.getAttribute("UserID");
+            Seller_ID = seller.getAttribute("UserID");
             Seller_Rating = seller.getAttribute("Rating");
             Name = getElementTextByTagNameNR(item, "Name");
             Currently = strip(getElementTextByTagNameNR(item,"Currently"));
@@ -95,9 +95,17 @@ public class ItemServlet extends HttpServlet implements Servlet {
 
             Started = getElementTextByTagNameNR(item,"Started");
             Ends = getElementTextByTagNameNR(item,"Ends");
-            String Description = getElementTextByTagNameNR(item, "Description");
+            Description = getElementTextByTagNameNR(item, "Description");
             if(Description.length() > 4000)
                 Description = Description.substring(0, 4000);
+            
+            Element Category[] = getElementsByTagNameNR(item,"Category");
+            String cate = "";
+            for(int i=0;i<Category.length;i++)
+            {
+                cate += getElementText(Category[i])+columnSeparator;;
+            }
+            Categories = cate.split("\\|\\*\\|");
             /*
             Element Bids = getElementByTagNameNR(item,"Bids");
             Element bid[] = getElementsByTagNameNR(Bids,"Bid");
@@ -119,7 +127,6 @@ public class ItemServlet extends HttpServlet implements Servlet {
         /*else{
             ItemID=null;
         }*/
-        
         request.setAttribute("Name", Name);
         request.setAttribute("Currently", Currently);
         request.setAttribute("Buy_Price", Buy_Price);
@@ -127,7 +134,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
         request.setAttribute("Number_of_Bids", Number_of_Bids);
         request.setAttribute("Started", Started);
         request.setAttribute("Ends", Ends);
-        request.setAttribute("Seller_UID", Seller_UID);
+        request.setAttribute("Seller_ID", Seller_ID);
         request.setAttribute("Seller_Rating", Seller_Rating);
         request.setAttribute("Description", Description);
         request.setAttribute("Categories", Categories);
