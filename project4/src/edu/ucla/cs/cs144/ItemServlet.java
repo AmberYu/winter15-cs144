@@ -187,6 +187,22 @@ public class ItemServlet extends HttpServlet implements Servlet {
         else
             return "";
     }
+    static Element[] getElementsByTagNameNR(Element e, String tagName) {
+        Vector< Element > elements = new Vector< Element >();
+        Node child = e.getFirstChild();
+        while (child != null) {
+            if (child instanceof Element && child.getNodeName().equals(tagName))
+            {
+                //if the node is an element node, transfer its type to element and store in the vector
+                elements.add( (Element)child );
+            }
+            child = child.getNextSibling();
+        }
+        //since we don't know the number of element nodes at first, we have to create a vecotr buffer to store result. After we store all elements into buffer, we can get the size of it so that we can establish an array
+        Element[] result = new Element[elements.size()];
+        elements.copyInto(result);
+        return result;
+    }
     
     private String strip(String money) {
         if (money.equals(""))
