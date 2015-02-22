@@ -37,7 +37,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
     private String Buy_Price;//?
     private String First_Bid;
     private String Number_of_Bids;
-    //private Bid[] bids;
+    private Bid[] Bids;
     private String Location;
     private String Country;
     private String Started;
@@ -45,13 +45,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
     private String Seller_ID;
     private String Seller_Rating;
     private String Description;
-    //private String BidUID;
-    //private String BidRating;
-    //private String BidLocation;
-    //private String BidCountry;
-    
-    //private String BidTime;
-    //private String BidAmount;
+
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -60,7 +54,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
         String itemID = request.getParameter("itemID");
         //get the itemXML by the itemID
         String itemXMLResult = AuctionSearchClient.getXMLDataForItemId(itemID);
-
+        
         Document doc=null;
         
         try {
@@ -95,6 +89,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
 
             Started = getElementTextByTagNameNR(item,"Started");
             Ends = getElementTextByTagNameNR(item,"Ends");
+            
             Description = getElementTextByTagNameNR(item, "Description");
             if(Description.length() > 4000)
                 Description = Description.substring(0, 4000);
@@ -106,20 +101,20 @@ public class ItemServlet extends HttpServlet implements Servlet {
                 cate += getElementText(Category[i])+columnSeparator;;
             }
             Categories = cate.split("\\|\\*\\|");
-            /*
-            Element Bids = getElementByTagNameNR(item,"Bids");
-            Element bid[] = getElementsByTagNameNR(Bids,"Bid");
+            //parse Bids
+            Element bid[] = getElementsByTagNameNR(getElementByTagNameNR(item,"Bids"),"Bid");
+            Bids = new Bid[bid.length];
             for(int i =0;i<bid.length;i++)
             {
+                Bids[i] = new Bid();
                 Element bidder = getElementByTagNameNR(bid[i],"Bidder");
-                BidUID = bidder.getAttribute("UserID");
-                BidRating = bidder.getAttribute("Rating");
-                BidLocation = getElementTextByTagNameNR(bidder,"Location");
-                BidCountry = getElementTextByTagNameNR(bidder,"Country");
-
-                BidTime = getElementTextByTagNameNR(bid[i],"Time");
-                BidAmount = strip(getElementTextByTagNameNR(bid[i],"Amount"));
-            }*/
+                Bids[i].setBidder(bidder.getAttribute("UserID"));
+                Bids[i].setBidder_rating(bidder.getAttribute("Rating"));
+                Bids[i].setLocation(getElementTextByTagNameNR(bidder,"Location"));
+                Bids[i].setCountry(getElementTextByTagNameNR(bidder,"Country"));
+                Bids[i].setTime(getElementTextByTagNameNR(bid[i],"Time"));
+                Bids[i].setAmount(strip(getElementTextByTagNameNR(bid[i],"Amount")));
+            }
             //sortBids();
                 
             
@@ -138,15 +133,8 @@ public class ItemServlet extends HttpServlet implements Servlet {
         request.setAttribute("Seller_Rating", Seller_Rating);
         request.setAttribute("Description", Description);
         request.setAttribute("Categories", Categories);
-        //request.setAttribute("BidUID", BidUID);
-        //request.setAttribute("BidRating", BidRating);
-        //request.setAttribute("BidLocation", BidLocation);
-        //request.setAttribute("BidCountry", BidCountry);
-        //request.setAttribute("BidTime", BidTime);
-        //request.setAttribute("BidAmount", BidAmount);
-        //ItemsBean ib = new ItemsBean(itemXMLResult);
+        request.setAttribute("Bids", Bids);
         request.setAttribute("title", "Item ID Search Result");
-        //request.setAttribute("itemBean", ib);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/item.jsp");
         dispatcher.forward(request,response);
