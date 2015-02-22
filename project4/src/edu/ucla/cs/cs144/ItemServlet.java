@@ -60,7 +60,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
         String itemID = request.getParameter("itemID");
         //get the itemXML by the itemID
         String itemXMLResult = AuctionSearchClient.getXMLDataForItemId(itemID);
-        
+
         Document doc=null;
         
         try {

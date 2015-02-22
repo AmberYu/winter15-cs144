@@ -43,7 +43,7 @@
 				<tr>
 					<td valign="top">Number of Bids:</td><td><%=request.getAttribute("Number_of_Bids")%></td>
 				</tr>
-				<%/*
+<%-- 				<%
 				<%if(request.getAttribute("Number_of_Bids")>0) {%>
 				
 				<tr>
@@ -72,7 +72,7 @@
 				</tr>
 				<tr>
 					<td valign="top">Country:</td><td><%=itemBean.getCountry() %></td>
-				</tr>*/%>
+				</tr>%> --%>
 				<tr>
 					<td valign="top">Started from:</td><td><%=request.getAttribute("Started") %></td>
 				</tr>
