@@ -14,7 +14,6 @@ public class SearchServlet extends HttpServlet implements Servlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        // your codes here
         //get the parameters contained in this request
         String content = "";
         content = request.getParameter("content");

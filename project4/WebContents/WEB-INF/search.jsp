@@ -1,6 +1,11 @@
 <html>
-	<% String[] itemIDs = (String[])request.getAttribute("itemIDs"); %>
-	<% String[] itemNames = (String[])request.getAttribute("itemNames"); %>
+	<% 
+		String[] itemIDs = (String[])request.getAttribute("itemIDs");
+		String[] itemNames = (String[])request.getAttribute("itemNames");
+		String content = (String)request.getAttribute("content");
+		int numResultsToSkip = (Integer)request.getAttribute("numResultsToSkip");
+		int numResultsToReturn = (Integer)request.getAttribute("numResultsToReturn");
+	%>
 	<head>
 		<title><%=request.getAttribute("title") %></title>
 	</head>
@@ -17,15 +22,56 @@
 							<input type="submit" name="submit" value="Search">
 						</div>
 					</td>
-
 				</tr>
 			</table>	
-		</form>	
-			<div>The total number of results is: <%=itemIDs.length %></div>
-			<ul id="list">
+		</form>
+
+		<div>The total number of results is: <%=itemIDs.length %></div>
+		<ul id="list">
 			<% for (int i=0; i<itemIDs.length; i++) {%>
-				<li><%=itemIDs[i] %>&nbsp;&nbsp;&nbsp;<%=itemNames[i] %></li>	
+				<li><a href="item?itemID=<%=itemIDs[i] %>"><%=itemIDs[i] %></a>&nbsp;&nbsp;&nbsp;<%=itemNames[i] %></li>	
 			<%} %>
-			</ul>
+		</ul>
+
+		<%
+		if (itemIDs.length > 0)
+		{
+		%>
+		<table>
+			<tr>
+				<td>
+					<%
+					if (numResultsToSkip > 0)
+					{
+						int newSkip = numResultsToSkip - numResultsToReturn;
+						if (newSkip < 0)
+							newSkip = 0;
+					%>
+					<a href="search?content=<%= content %>&amp;numResultsToSkip=<%= newSkip %>&amp;numResultsToReturn=<%= numResultsToReturn %>"> Previous </a>
+					<%}%>
+				</td>
+				<td>
+					<%
+					if (itemIDs.length != 0 && numResultsToReturn <= itemIDs.length && (numResultsToReturn > 0 || numResultsToSkip > 0))
+					{
+					%>
+					<a href="search?content=<%= content %>&amp;numResultsToSkip=<%= numResultsToSkip + numResultsToReturn %>&amp;numResultsToReturn=<%= numResultsToReturn %>"> Next </a>
+					<%}%>
+				</td>
+			</tr>
+		</table>
+		<%
+		} else 
+		{
+			if (numResultsToSkip > 0)
+			{
+				int newSkip = numResultsToSkip - numResultsToReturn;
+				if (newSkip < 0)
+					newSkip = 0;
+		%>
+		<a class="next_prev" href="search?content=<%= content%>&numResultsToSkip=<%= newSkip%>&numResultsToReturn=<%= numResultsToReturn%>"> Previous </a>
+ 		<% }
+ 		} %>
+
 	</body>	
 </html>
