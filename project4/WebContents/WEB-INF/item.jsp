@@ -47,7 +47,7 @@
 				<tr>
 					<td valign="top">Bids</td>
 					<td valign="top">
-					<% Bid[] bids = request.getAttribute("Bids"); %>
+					<% Bid[] bids = (Bid[]) request.getAttribute("Bids"); %>
 					<% for(int i=0; i<bids.length; i++) {%>
 						<ul>
 							<li>Bid<%=i %>
@@ -66,10 +66,10 @@
 				</tr>	
 	
 				<tr>
-					<td valign="top">Location:</td><td><%=itemBean.getLocation() %></td>
+					<td valign="top">Location:</td><td><%=request.getAttribute("Location") %></td>
 				</tr>
 				<tr>
-					<td valign="top">Country:</td><td><%=itemBean.getCountry() %></td>
+					<td valign="top">Country:</td><td><%=request.getAttribute("Country") %></td>
 				</tr>
 				<tr>
 					<td valign="top">Started from:</td><td><%=request.getAttribute("Started") %></td>

@@ -134,6 +134,8 @@ public class ItemServlet extends HttpServlet implements Servlet {
         request.setAttribute("Description", Description);
         request.setAttribute("Categories", Categories);
         request.setAttribute("Bids", Bids);
+        request.setAttribute("Country", Country);
+        request.setAttribute("Location", Location);
         request.setAttribute("title", "Item ID Search Result");
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/item.jsp");
