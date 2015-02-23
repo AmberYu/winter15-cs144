@@ -13,7 +13,6 @@
 							<input type="text" name="itemID" >
 							<input type="submit" name="submit" value="Search">
 						</div></td>
-
 				</tr>
 			</table>	
 		</form>
@@ -44,9 +43,7 @@
 				<tr>
 					<td valign="top">Number of Bids:</td><td><%=request.getAttribute("Number_of_Bids")%></td>
 				</tr>
-				
-				<%if(request.getAttribute("Number_of_Bids")>0) {%>
-				
+								
 				<tr>
 					<td valign="top">Bids</td>
 					<td valign="top">
@@ -67,13 +64,13 @@
 					<%} %>
 					</td>	
 				</tr>	
-				<%} 
+	
 				<tr>
 					<td valign="top">Location:</td><td><%=itemBean.getLocation() %></td>
 				</tr>
 				<tr>
 					<td valign="top">Country:</td><td><%=itemBean.getCountry() %></td>
-				</tr>*/%>
+				</tr>
 				<tr>
 					<td valign="top">Started from:</td><td><%=request.getAttribute("Started") %></td>
 				</tr>
@@ -81,7 +78,7 @@
 					<td valign="top">End By:</td><td><%=request.getAttribute("Ends") %></td>
 				</tr>
 				<tr>
-					<td valign="top">Seller:</td><td><%=request.getAttribute("Seller_UID")%></td>
+					<td valign="top">Seller:</td><td><%=request.getAttribute("Seller_ID")%></td>
 				</tr>
 				<tr>
 					<td valign="top">Rating:</td><td><%=request.getAttribute("Seller_Rating")%></td>
