@@ -45,6 +45,8 @@ public class ItemServlet extends HttpServlet implements Servlet {
     private String Seller_ID;
     private String Seller_Rating;
     private String Description;
+    private String Latitude;
+    private String Longitude;
 
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -84,8 +86,8 @@ public class ItemServlet extends HttpServlet implements Servlet {
             Location = getElementText(getElementByTagNameNR(item,"Location"));
             Country = getElementText(getElementByTagNameNR(item,"Country"));
             Element location_ele = getElementByTagNameNR(item, "Location");
-            String latitude = location_ele.getAttribute("Latitude");
-            String longitude = location_ele.getAttribute("Longitude");
+            Latitude = location_ele.getAttribute("Latitude");
+            Longitude = location_ele.getAttribute("Longitude");
 
             Started = getElementTextByTagNameNR(item,"Started");
             Ends = getElementTextByTagNameNR(item,"Ends");
@@ -136,6 +138,8 @@ public class ItemServlet extends HttpServlet implements Servlet {
         request.setAttribute("Bids", Bids);
         request.setAttribute("Country", Country);
         request.setAttribute("Location", Location);
+        request.setAttribute("Longitude", Longitude);
+        request.setAttribute("Latitude", Latitude);
         request.setAttribute("title", "Item ID Search Result");
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/item.jsp");

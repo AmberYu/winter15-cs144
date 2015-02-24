@@ -26,7 +26,7 @@
 			</table>	
 		</form>
 
-		<div>The total number of results is: <%=itemIDs.length %></div>
+		<!-- <div>The total number of results is: <%=itemIDs.length %></div> -->
 		<ul id="list">
 			<% for (int i=0; i<itemIDs.length; i++) {%>
 				<li><a href="item?itemID=<%=itemIDs[i] %>"><%=itemIDs[i] %></a>&nbsp;&nbsp;&nbsp;<%=itemNames[i] %></li>	

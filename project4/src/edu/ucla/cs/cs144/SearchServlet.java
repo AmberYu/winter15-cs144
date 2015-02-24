@@ -19,6 +19,7 @@ public class SearchServlet extends HttpServlet implements Servlet {
         content = request.getParameter("content");
         int numResultsToSkip = Integer.parseInt(request.getParameter("numResultsToSkip"));
         int numResultsToReturn = Integer.parseInt(request.getParameter("numResultsToReturn"));
+       	if (numResultsToReturn == 0) numResultsToReturn = Integer.MAX_VALUE;
         
         SearchResult[] results = AuctionSearchClient.basicSearch(content, 0, 0);
         request.setAttribute("lengthOfAllResults",results.length);
