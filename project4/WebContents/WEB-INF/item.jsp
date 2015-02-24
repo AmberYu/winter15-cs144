@@ -52,12 +52,13 @@
 						<ul>
 							<li>Bid<%=i %>
 								<ul>
-									<li>Bidder: <%=bids[i].getBidder() %></li>
-									<li>Rating: <%=bids[i].getBidder_rating() %></li>
-									<li>Location: <%=bids[i].getLocation() %></li>
-									<li>Country: <%=bids[i].getCountry() %></li>
-									<li>Time: <%=bids[i].getTime() %></li>
-									<li>Amount: $<%=bids[i].getAmount() %></li>
+									<% Bid b = bids[bids.length-i-1]; %>
+									<li>Bidder: <%=b.getBidder() %></li>
+									<li>Rating: <%=b.getBidder_rating() %></li>
+									<li>Location: <%=b.getLocation() %></li>
+									<li>Country: <%=b.getCountry() %></li>
+									<li>Time: <%=b.getTime() %></li>
+									<li>Amount: $<%=b.getAmount() %></li>
 								</ul>								
 							</li>
 						</ul>
