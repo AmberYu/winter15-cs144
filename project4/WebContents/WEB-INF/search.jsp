@@ -8,6 +8,13 @@
 	%>
 	<head>
 		<title><%=request.getAttribute("title") %></title>
+		<script type="text/javascript" src="autosuggest.js"></script>
+		<link rel="stylesheet" type="text/css" href="autosuggest.css" />
+		<script type="text/javascript">
+            window.onload = function () {
+                var oTextbox = new AutoSuggestControl(document.getElementById("search_input"));        
+            }
+        </script>
 	</head>
 	<body>
 		<form name="search1" action="/eBay/search" method="GET">
@@ -15,11 +22,11 @@
                 <tr><td align="center"><img alt="Ebay" src="ebay.png"/></td></tr>
 				<tr>
 					<td align="center" >
-        				<div id="textbox" >
-							<input type="text" name="content" >
+        				<div id="search_slide" >
+							<input type="text" name="content" id="search_input" value="" />
 							<input type="hidden" name="numResultsToSkip" value="0">
 							<input type="hidden" name="numResultsToReturn" value="20">
-							<input type="submit" name="submit" value="Search">
+							<input type="submit" name="submit" id="search_submit" value="Search">
 						</div>
 					</td>
 				</tr>
