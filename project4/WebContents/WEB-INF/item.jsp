@@ -116,7 +116,11 @@
 			%>
 		</table>
 
-		<div id="map-canvas" style="width:50%; height:50%"></div>
+		</script>
+		
+		<%}%>
+	</div>
+	<div id="map-canvas" style="width:50%; height:50%"></div>
 		<script type="text/javascript"
 			src="http://maps.google.com/maps/api/js?sensor=false">
 		</script>
@@ -139,10 +143,6 @@
 					}
 				});
 			}
-		</script>
-		
-		<%}%>
-	</div>
 		
 	</body>
 </html>
