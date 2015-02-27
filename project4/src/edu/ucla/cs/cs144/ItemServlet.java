@@ -53,77 +53,89 @@ public class ItemServlet extends HttpServlet implements Servlet {
     {
         // your codes here
         //get the itemID contained in the request
+        String Error="";
         String itemID = request.getParameter("itemID");
-        //get the itemXML by the itemID
-        String itemXMLResult = AuctionSearchClient.getXMLDataForItemId(itemID);
-        
-        Document doc=null;
-        
-        try {
-            doc = loadXMLFromString(itemXMLResult);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.exit(3);
-        }catch (Exception e) {
-            e.printStackTrace();
-            System.exit(3);
-        }
-        
-        System.out.println("Successfully parsed!");
-        
-        Element item = doc.getDocumentElement();
-        
-        if(item!=null && item.getNodeName().equals("Item")){
-            Element seller = getElementByTagNameNR(item,"Seller");
-            Seller_ID = seller.getAttribute("UserID");
-            Seller_Rating = seller.getAttribute("Rating");
-            Name = getElementTextByTagNameNR(item, "Name");
-            Currently = strip(getElementTextByTagNameNR(item,"Currently"));
-            First_Bid = strip(getElementTextByTagNameNR(item,"First_Bid"));
-            Number_of_Bids = getElementTextByTagNameNR(item,"Number_of_Bids");
-            Buy_Price =strip(getElementTextByTagNameNR(item, "Buy_Price"));
-            Location = getElementText(getElementByTagNameNR(item,"Location"));
-            Country = getElementText(getElementByTagNameNR(item,"Country"));
-            Element location_ele = getElementByTagNameNR(item, "Location");
-            Latitude = location_ele.getAttribute("Latitude");
-            Longitude = location_ele.getAttribute("Longitude");
-
-            Started = getElementTextByTagNameNR(item,"Started");
-            Ends = getElementTextByTagNameNR(item,"Ends");
-            
-            Description = getElementTextByTagNameNR(item, "Description");
-            if(Description.length() > 4000)
-                Description = Description.substring(0, 4000);
-            
-            Element Category[] = getElementsByTagNameNR(item,"Category");
-            String cate = "";
-            for(int i=0;i<Category.length;i++)
-            {
-                cate += getElementText(Category[i])+columnSeparator;;
-            }
-            Categories = cate.split("\\|\\*\\|");
-            //parse Bids
-            Element bid[] = getElementsByTagNameNR(getElementByTagNameNR(item,"Bids"),"Bid");
-            Bids = new Bid[bid.length];
-            for(int i =0;i<bid.length;i++)
-            {
-                Bids[i] = new Bid();
-                Element bidder = getElementByTagNameNR(bid[i],"Bidder");
-                Bids[i].setBidder(bidder.getAttribute("UserID"));
-                Bids[i].setBidder_rating(bidder.getAttribute("Rating"));
-                Bids[i].setLocation(getElementTextByTagNameNR(bidder,"Location"));
-                Bids[i].setCountry(getElementTextByTagNameNR(bidder,"Country"));
-                Bids[i].setTime(getElementTextByTagNameNR(bid[i],"Time"));
-                Bids[i].setAmount(strip(getElementTextByTagNameNR(bid[i],"Amount")));
-            }
-            //sortBids();
+        itemID = itemID.replaceAll("\\s+","");
+        if(itemID.length()>=1){
+            //get the itemXML by the itemID
+            String itemXMLResult = AuctionSearchClient.getXMLDataForItemId(itemID);
+            if(itemXMLResult!=null && itemXMLResult.length()>0){
+                Document doc=null;
                 
-            
+                try {
+                    doc = loadXMLFromString(itemXMLResult);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                    System.exit(3);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                    System.exit(3);
+                }
+                
+                Element item = doc.getDocumentElement();
+                
+                if(item!=null && item.getNodeName().equals("Item")){
+                    Element seller = getElementByTagNameNR(item,"Seller");
+                    Seller_ID = seller.getAttribute("UserID");
+                    Seller_Rating = seller.getAttribute("Rating");
+                    Name = getElementTextByTagNameNR(item, "Name");
+                    Currently = strip(getElementTextByTagNameNR(item,"Currently"));
+                    First_Bid = strip(getElementTextByTagNameNR(item,"First_Bid"));
+                    Number_of_Bids = getElementTextByTagNameNR(item,"Number_of_Bids");
+                    Buy_Price =strip(getElementTextByTagNameNR(item, "Buy_Price"));
+                    Location = getElementText(getElementByTagNameNR(item,"Location"));
+                    Country = getElementText(getElementByTagNameNR(item,"Country"));
+                    Element location_ele = getElementByTagNameNR(item, "Location");
+                    Latitude = location_ele.getAttribute("Latitude");
+                    Longitude = location_ele.getAttribute("Longitude");
+                    
+                    Started = getElementTextByTagNameNR(item,"Started");
+                    Ends = getElementTextByTagNameNR(item,"Ends");
+                    
+                    Description = getElementTextByTagNameNR(item, "Description");
+                    if(Description.length() > 4000)
+                        Description = Description.substring(0, 4000);
+                    
+                    Element Category[] = getElementsByTagNameNR(item,"Category");
+                    String cate = "";
+                    for(int i=0;i<Category.length;i++)
+                    {
+                        cate += getElementText(Category[i])+columnSeparator;;
+                    }
+                    Categories = cate.split("\\|\\*\\|");
+                    //parse Bids
+                    Element bid[] = getElementsByTagNameNR(getElementByTagNameNR(item,"Bids"),"Bid");
+                    Bids = new Bid[bid.length];
+                    for(int i =0;i<bid.length;i++)
+                    {
+                        Bids[i] = new Bid();
+                        Element bidder = getElementByTagNameNR(bid[i],"Bidder");
+                        Bids[i].setBidder(bidder.getAttribute("UserID"));
+                        Bids[i].setBidder_rating(bidder.getAttribute("Rating"));
+                        Bids[i].setLocation(getElementTextByTagNameNR(bidder,"Location"));
+                        Bids[i].setCountry(getElementTextByTagNameNR(bidder,"Country"));
+                        Bids[i].setTime(getElementTextByTagNameNR(bid[i],"Time"));
+                        Bids[i].setAmount(strip(getElementTextByTagNameNR(bid[i],"Amount")));
+                    }
+                    //sortBids();
+                }
+            }
+            else{
+                Error="Sorry, no result found!";
+                itemID = "";
+                request.setAttribute("Error", Error);
+            }
         }
+        else{
+            Error="Warning: search string can't be empty!";
+            request.setAttribute("Error", Error);
+        }
+        
         /*else{
             ItemID=null;
         }*/
+        request.setAttribute("itemID", itemID);
         request.setAttribute("Name", Name);
         request.setAttribute("Currently", Currently);
         request.setAttribute("Buy_Price", Buy_Price);
