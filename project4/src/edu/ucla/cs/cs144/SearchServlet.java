@@ -15,19 +15,39 @@ public class SearchServlet extends HttpServlet implements Servlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         //get the parameters contained in this request
-        String content = "";
-        content = request.getParameter("content");
-        int numResultsToSkip = Integer.parseInt(request.getParameter("numResultsToSkip"));
-        int numResultsToReturn = Integer.parseInt(request.getParameter("numResultsToReturn"));
-       	if (numResultsToReturn == 0) numResultsToReturn = Integer.MAX_VALUE;
+        String q = "";
+        int numResultsToSkip = 0, numResultsToReturn = 0;
+        if (request.getParameter("q") != null)
+        	q = request.getParameter("q");
+
+        if (request.getParameter("numResultsToSkip") != null) 
+        {
+        	try {
+        		numResultsToSkip = Integer.parseInt(request.getParameter("numResultsToSkip"));
+        		if (numResultsToSkip < 0) numResultsToSkip = 0;
+        	} catch (NumberFormatException numberFormatException) {
+        		numResultsToSkip = 0;
+        	}
+        }
+        	
+        if (request.getParameter("numResultsToReturn") != null) 
+        {
+        	try {
+        		numResultsToReturn = Integer.parseInt(request.getParameter("numResultsToReturn"));
+        		if (numResultsToReturn == 0) numResultsToReturn = Integer.MAX_VALUE;
+        		if (numResultsToReturn < 0) numResultsToReturn = 0;
+        	} catch (NumberFormatException numberFormatException) {
+        		numResultsToReturn = 0;
+        	}
+        }
         
-        SearchResult[] results = AuctionSearchClient.basicSearch(content, 0, 0);
+        SearchResult[] results = AuctionSearchClient.basicSearch(q, 0, 0);
         request.setAttribute("lengthOfAllResults",results.length);
         //get itemID and itemName from the searchresult
         String[] itemIDs = new String[0];
         String[] itemNames = new String[0];
-        if(content.length()>=1){
-            SearchResult[] s = AuctionSearchClient.basicSearch(content, numResultsToSkip, numResultsToReturn);
+        if(q.length()>=1){
+            SearchResult[] s = AuctionSearchClient.basicSearch(q, numResultsToSkip, numResultsToReturn);
             int lengthOfResult = s.length;
             if(lengthOfResult>0){
                 itemIDs = new String[lengthOfResult];
@@ -45,7 +65,7 @@ public class SearchServlet extends HttpServlet implements Servlet {
         request.setAttribute("title", "Basic Search Result");
         request.setAttribute("numResultsToSkip", numResultsToSkip);
         request.setAttribute("numResultsToReturn", numResultsToReturn);
-        request.setAttribute("content", content);
+        request.setAttribute("q", q);
         request.setAttribute("itemIDs", itemIDs);
         request.setAttribute("itemNames", itemNames);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/search.jsp");

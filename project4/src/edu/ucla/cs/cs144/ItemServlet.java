@@ -53,8 +53,10 @@ public class ItemServlet extends HttpServlet implements Servlet {
     {
         // your codes here
         //get the itemID contained in the request
-        String Error="";
-        String itemID = request.getParameter("itemID");
+        String Error = "", itemID = "";
+        if (request.getParameter("itemID") != null)
+            itemID = request.getParameter("itemID");
+
         itemID = itemID.replaceAll("\\s+","");
         if(itemID.length()>=1){
             //get the itemXML by the itemID
@@ -122,13 +124,13 @@ public class ItemServlet extends HttpServlet implements Servlet {
                 }
             }
             else{
-                Error="Sorry, no result found!";
+                Error="No matching result.";
                 itemID = "";
                 request.setAttribute("Error", Error);
             }
         }
         else{
-            Error="Warning: search string can't be empty!";
+            Error="Search query can't be empty.";
             request.setAttribute("Error", Error);
         }
         

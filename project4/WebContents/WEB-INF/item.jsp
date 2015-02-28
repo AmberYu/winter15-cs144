@@ -5,12 +5,13 @@
 	</head>
 	<body onload="mapInit()">
 		<form name="get1" action="/eBay/item" method="GET">
-			<table border="0" align="center" style="padding-top:50px">
+			<table border="0" align="center">
                 <tr><td align="center"><img alt="Ebay" src="ebay.png"/></td></tr>
 				<tr>
 					<td align="center" >
         				<div id="textbox" >
-							<input type="text" name="itemID" >
+        					<h2>Auction Item Search </h2>
+							<input type="text" name="itemID" placeholder = "Type in item id here...">
 							<input type="submit" name="submit" value="Search">
 						</div></td>
 				</tr>
@@ -20,10 +21,11 @@
 		<%String itemID = (String) request.getAttribute("itemID"); %>
 		<%String address = ""; %>
 		<% if(itemID.length() < 1) {%>
-		<h2><%= request.getAttribute("Error")%></h2>
-		<%}else{ %>
-		<h3>Item Information</h3> 
-		<table border="1" cellspacing="5px" width="800">
+			<h2><%= request.getAttribute("Error")%></h2>
+		<%}else
+		{ %>
+		<h3><center>Item Information</center></h3> 
+		<table border="1" cellspacing="5px" width="800" align="center">
 			<col width="300">
 			<col width="500">
 			<tr>
@@ -73,15 +75,12 @@
 			</tr>
 			<tr>
 				<td valign="top">Description:</td><td><%=request.getAttribute("Description")%></td>
-			</tr>
-							
+			</tr>	
 			<tr>
 				<td valign="top">Bids</td>
 				<% Bid[] bids = (Bid[]) request.getAttribute("Bids"); %>
 				<%if(bids.length>=1){%>
 				<td valign="top">
-
-				
 
 				<% for(int i=0; i<bids.length; i++) {%>
 					<ul>
@@ -116,11 +115,11 @@
 			%>
 		</table>
 
-		</script>
-		
-		<%}%>
-	</div>
-	<div id="map-canvas" style="width:50%; height:50%"></div>
+		</div>
+		<br>
+
+		<h3><center>Item location on the map</center></h3>
+		<div id="map-canvas" style="width:100%; height:50%;"></div>
 		<script type="text/javascript"
 			src="http://maps.google.com/maps/api/js?sensor=false">
 		</script>
@@ -143,6 +142,10 @@
 					}
 				});
 			}
+		</script>
+
+		<%}%>
 		
+		<br><br>
 	</body>
 </html>
