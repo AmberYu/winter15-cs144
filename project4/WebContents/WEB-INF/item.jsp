@@ -1,10 +1,21 @@
 <%@page import="edu.ucla.cs.cs144.Bid"%>
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<title><%=request.getAttribute("title") %></title>
+		<link href="style.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body onload="mapInit()">
-		<form name="get1" action="/eBay/item" method="GET">
+	<div id="topPan">
+    	<div id="logo"><img src="images/logo.gif" title="Ebay" alt="Ebay" width="200" height="220" border="0" /></div>
+    	<ul>
+    		<li class="current"><a href="index.html">Home</a></li>
+    		<li><a href="keywordSearch.html">Keyword Search</a></li>
+    		<li><a href="getItem.html">ItemID Search</a></li>
+    	</ul>
+    </div>
+		
+    <form name="get1" action="/eBay/item" method="GET">
 			<table border="0" align="center">
                 <tr><td align="center"><img alt="Ebay" src="ebay.png"/></td></tr>
 				<tr>
@@ -147,5 +158,16 @@
 		<%}%>
 		
 		<br><br>
+<div id="footermainPan">
+  <div id="footerPan">
+    <div id="footerlogoPan"><img src="images/footerlogo.gif" title="Ebay" alt="Ebay" width="160" height="100" border="0" /></div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="keywordSearch.html">Keyword Search</a></li>
+      <li><a href="getItem.html">ItemID Search</a></li>
+    </ul>
+    <p class="copyright">©Gunagli Wu, Jingzhi Yu, 2015</p>
+  </div>
+</div>
 	</body>
 </html>
