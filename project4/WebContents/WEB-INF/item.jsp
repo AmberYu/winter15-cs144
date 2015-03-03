@@ -14,20 +14,19 @@
     		<li><a href="getItem.html">ItemID Search</a></li>
     	</ul>
     </div>
-		
-    <form name="get1" action="/eBay/item" method="GET">
-			<table border="0" align="center">
-                <tr><td align="center"><img alt="Ebay" src="ebay.png"/></td></tr>
-				<tr>
-					<td align="center" >
-        				<div id="textbox" >
-        					<h2>Auction Item Search </h2>
-							<input type="text" name="itemID" placeholder = "Type in item id here...">
-							<input type="submit" name="submit" value="Search">
-						</div></td>
-				</tr>
-			</table>	
-		</form>
+	
+	<tr><td align="center"><img alt="Ebay" src="ebay.png"/></td></tr>
+    <div id="middlePan">
+  	<div id="middletopPan">
+		<form name="get1" action="/eBay/item" method="GET">
+        <label>Item Search </label>
+				<input type="text" name="itemID" placeholder = "Type in item id here...">
+				<input type="submit" name="submit" class="button" value="Go" />
+				
+		</form>	
+	</div>
+    	</div>
+
 		<div>
 		<%String itemID = (String) request.getAttribute("itemID"); %>
 		<%String address = ""; %>
