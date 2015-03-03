@@ -44,7 +44,7 @@
 
 		<!-- <div>The total number of results is: <%=itemIDs.length %></div> -->
 		<% if (itemIDs.length == 0) {%>
-			<h3> No matching result! </h3>
+			<h3><%= request.getAttribute("Error")%></h3>
 		<%} else {%>
 			<h3> Keyword search result: </h3>
 		<%}%>
@@ -102,7 +102,7 @@
       <li><a href="keywordSearch.html">Keyword Search</a></li>
       <li><a href="getItem.html">ItemID Search</a></li>
     </ul>
-    <p class="copyright">©Gunagli Wu, Jingzhi Yu, 2015</p>
+    <p class="copyright">Copyright &copy; 2015 Gunagli Wu, Jingzhi Yu</p>
   </div>
 </div>
 

@@ -124,7 +124,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
                 }
             }
             else{
-                Error="No matching result.";
+                Error="The item whose ID is " + itemID + " does not exist, please try again.";
                 itemID = "";
                 request.setAttribute("Error", Error);
             }

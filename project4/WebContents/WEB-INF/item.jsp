@@ -31,7 +31,7 @@
 		<%String itemID = (String) request.getAttribute("itemID"); %>
 		<%String address = ""; %>
 		<% if(itemID.length() < 1) {%>
-			<h2><%= request.getAttribute("Error")%></h2>
+			<h3><%= request.getAttribute("Error")%></h3>
 		<%}else
 		{ %>
 		<h3><center>Item Information</center></h3> 
@@ -165,7 +165,7 @@
       <li><a href="keywordSearch.html">Keyword Search</a></li>
       <li><a href="getItem.html">ItemID Search</a></li>
     </ul>
-    <p class="copyright">©Gunagli Wu, Jingzhi Yu, 2015</p>
+    <p class="copyright">Copyright &copy; 2015 Gunagli Wu, Jingzhi Yu</p>
   </div>
 </div>
 	</body>

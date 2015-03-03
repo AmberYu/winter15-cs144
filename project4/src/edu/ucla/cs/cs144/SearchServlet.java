@@ -58,7 +58,7 @@ public class SearchServlet extends HttpServlet implements Servlet {
                 }
             }
             else{
-                String error = "No Matching Result!";
+                String error = "The keyword " + q + " does not match any item, please try again.";
                 request.setAttribute("Error",error);
             }
         }

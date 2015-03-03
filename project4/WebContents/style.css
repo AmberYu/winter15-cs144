@@ -58,7 +58,7 @@ body div ul{list-style-type:none;}
 #footerPan ul.templateworld li a{background:#FFF; display:block; color:#444; text-decoration:none;}
 #footerPan ul.templateworld li a:hover{text-decoration:underline;}
 
-#footerPan p.copyright{width:204px; background: url(images/copyrightbg.gif) 0 0 repeat-x #FFFDF6; color:#D20039; position:absolute; top:85px; left:30px;}
+#footerPan p.copyright{width:250px; background: url(images/copyrightbg.gif) 0 0 repeat-x #FFFDF6; color:#D20039; position:absolute; top:85px; left:30px;}
 
 #footerPanhtml{width:58px; height:19px; display:block; position:absolute; top:47px; left:46px;}
 #footerPanhtml a{width:53px; height:19px; background:url(images/button1-normal.gif) 0 0 no-repeat #fff; display:block; position:absolute; top:0px; left:0px; line-height:19px; padding:1px 0 0 5px; border:1px solid #FFFFFA; color:#353427; text-transform:uppercase; text-decoration:none;}
