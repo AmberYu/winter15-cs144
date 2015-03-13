@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 import java.io.*;
 import java.text.*;
@@ -155,6 +156,11 @@ public class ItemServlet extends HttpServlet implements Servlet {
         request.setAttribute("Longitude", Longitude);
         request.setAttribute("Latitude", Latitude);
         request.setAttribute("title", "Item ID Search Result");
+
+        HttpSession session = request.getSession(true);
+        session.setAttribute("itemID", itemID);
+        session.setAttribute("Name", Name);
+        session.setAttribute("Buy_Price", Buy_Price);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/item.jsp");
         dispatcher.forward(request,response);

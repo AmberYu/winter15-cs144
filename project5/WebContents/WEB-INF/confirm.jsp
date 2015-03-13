@@ -22,8 +22,8 @@
     <h4>Item ID: <%= request.getAttribute("itemID") %></h4> 
     <h4>Item Name: <%= request.getAttribute("Name") %></h4> 
    	<h4>Buy Price: $<%= request.getAttribute("Buy_Price") %></h4> 
-    <h4>Credit Card: <%= request.getAttribute("CC") %></h4>
-    <h4>Time: <%= request.getAttribute("Time") %></h4>
+    <h4>Credit Card: <%= request.getAttribute("creditCardNumber") %></h4>
+    <h4>Time: <%= request.getAttribute("currentTimeStamp") %></h4>
     	
     </section><!-- content -->
 </div><!-- container -->
@@ -36,7 +36,7 @@
       <li><a href="keywordSearch.html">Keyword Search</a></li>
       <li><a href="getItem.html">ItemID Search</a></li>
     </ul>
-    <p class="copyright">©Gunagli Wu, Jingzhi Yu, 2015</p>
+    <p class="copyright">Copyright &copy; 2015 Gunagli Wu, Jingzhi Yu</p>
   </div>
 </div>
 		

@@ -59,7 +59,7 @@
 			<tr>
 				<td valign="top">Buy Price:</td>
 				<%if(request.getAttribute("Buy_Price") != ""){%>
-					<td><form name="pay" action="/eBay/pay" >
+					<td><form name="pay" action="/eBay/pay" method="GET">
 						$<%=request.getAttribute("Buy_Price") %>
 						<input type="hidden" name="id" value="<%= request.getAttribute("itemID") %>" />
 						<input type="submit" value="Pay Now" />

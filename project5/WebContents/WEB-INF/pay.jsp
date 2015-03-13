@@ -1,4 +1,4 @@
-<% String secureURL = "https://" + request.getServerName() + ":8443" + request.getContextPath() + "/pay"; %>
+<% String secureURL = "https://" + request.getServerName() + ":8443" + request.getContextPath() + "/confirm"; %>
 
 <html>
     <head>
@@ -29,7 +29,7 @@
         <input type="hidden" name="id" value="<%= request.getAttribute("itemID") %>" />
         <input type="hidden" name="action" value="confirm" />
         <div>
-                <input type="text" placeholder="Enter Credit Card #:" id="password" name="cc" />
+                <input type="text" placeholder="Enter Credit Card #:" id="password" name="creditCardNumber" />
         </div>
         
         <div><input type="submit" value="Pay" /></div>
@@ -45,7 +45,7 @@
       <li><a href="keywordSearch.html">Keyword Search</a></li>
       <li><a href="getItem.html">ItemID Search</a></li>
     </ul>
-    <p class="copyright">©Gunagli Wu, Jingzhi Yu, 2015</p>
+    <p class="copyright">Copyright &copy; 2015 Gunagli Wu, Jingzhi Yu</p>
   </div>
 </div>
 	</body>
