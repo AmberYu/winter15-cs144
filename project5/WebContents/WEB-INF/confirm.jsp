@@ -2,7 +2,7 @@
      <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <meta charset="utf-8">
-        <title><h2>Credit Card Input Page</h2></title>
+        <title>Confirmation</title>
         <link href="style.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="payment_style.css" />
     </head>
@@ -10,9 +10,9 @@
         <div id="topPan">
         <div id="logo"><img src="images/logo.gif" title="Ebay" alt="Ebay" width="200" height="220" border="0" /></div>
         <ul>
-            <li class="current"><a href="index.html">Home</a></li>
-            <li><a href="keywordSearch.html">Keyword Search</a></li>
-            <li><a href="getItem.html">ItemID Search</a></li>
+            <li class="current"><a href="http://localhost:1448/eBay/index.html">Home</a></li>
+            <li><a href="http://localhost:1448/eBay/keywordSearch.html">Keyword Search</a></li>
+            <li><a href="http://localhost:1448/eBay/getItem.html">ItemID Search</a></li>
         </ul>
     </div>
      <div class="container">
@@ -32,9 +32,9 @@
   <div id="footerPan">
     <div id="footerlogoPan"><img src="images/footerlogo.gif" title="Ebay" alt="Ebay" width="160" height="100" border="0" /></div>
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="keywordSearch.html">Keyword Search</a></li>
-      <li><a href="getItem.html">ItemID Search</a></li>
+      <li><a href="http://localhost:1448/eBay/index.html">Home</a></li>
+      <li><a href="http://localhost:1448/eBay/keywordSearch.html">Keyword Search</a></li>
+      <li><a href="http://localhost:1448/eBay/getItem.html">ItemID Search</a></li>
     </ul>
     <p class="copyright">Copyright &copy; 2015 Gunagli Wu, Jingzhi Yu</p>
   </div>
